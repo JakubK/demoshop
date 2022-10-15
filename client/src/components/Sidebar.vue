@@ -36,17 +36,13 @@
   </div>
 </template>
 
-<script>
-
-export default {
-  name: 'Sidebar',
-  props: {
-    filtersHidden: {
-      type: Boolean,
-      default: false
-    }
+<script lang="ts" setup>
+defineProps({
+  filtersHidden: {
+    type: Boolean,
+    default: false
   }
-}
+})
 </script>
 
 <style lang="scss" src="../scss/Sidebar.scss"></style>

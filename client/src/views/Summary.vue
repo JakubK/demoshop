@@ -18,8 +18,8 @@
             </div>
             <div class="prod-price">
               <p class="price inverted">
-                <span>{{ item.quantity * item.product.regularPrice | pln }}</span>
-                <span>{{ item.quantity * item.product.price | pln }}</span>
+                <span>{{ item.quantity * item.product.regularPrice }}</span>
+                <span>{{ item.quantity * item.product.price }}</span>
               </p>
               <p class="promo summary-promo">
                 {{ 100 - ((item.product.price / item.product.regularPrice) * 100) }}% taniej
@@ -71,7 +71,7 @@
           <div class="summary-details">
             <p>
               <span>suma zamówienia:</span>
-              <span>{{ getTotalPriceInCart | pln }}</span>
+              <span>{{ getTotalPriceInCart }}</span>
             </p>
             <p>
               <span>dostawa:</span>
@@ -79,11 +79,11 @@
             </p>
             <p>
               <span>do zapłaty łącznie (brutto):</span>
-              <span class="amount-to-pay">{{ getTotalPriceInCart + deliveryAmount | pln }}</span>
+              <span class="amount-to-pay">{{ getTotalPriceInCart + deliveryAmount }}</span>
             </p>
             <p class="save">
               <span>oszczędzasz:</span>
-              <span>{{ getTotalAmountWithDiscountApplied | pln }}</span>
+              <span>{{ getTotalAmountWithDiscountApplied }}</span>
             </p>
           </div>
         </div>
@@ -109,68 +109,50 @@
   </div>
 </template>
 
-<script>
+<script lang="ts" setup>
 
-import Steps from '../components/Steps'
-import { ROUTING } from '../const/routing.const'
-import { ToolsClass } from '../tools/Tools.class'
-import { mapState, mapGetters, mapMutations } from 'vuex'
-import axiosInstance from '../api/axios'
+import Steps from '../components/Steps.vue'
+import { useStore } from '../store'
+import axiosInstance from '../api'
 import { ENDPOINTS } from '../const/endpoints.const'
+import { computed, ref } from 'vue'
+import router, { ROUTING } from '../router'
 
-export default {
-  name: 'Summary',
-  data () {
-    return {
-      deliveryAmount: 15.90,
-      processing: false
-    }
-  },
-  components: { Steps },
-  computed: {
-    ...mapState({
-      itemsInCart: state => state.cart.cartItems
-    }),
-    ...mapGetters({
-      getTotalPriceInCart: 'getTotalPriceInCart',
-      getTotalAmountWithDiscountApplied: 'getTotalAmountWithDiscountApplied'
-    })
-  },
-  methods: {
-    ...mapMutations([
-      'UPDATE_CART'
-    ]),
-    goHome () {
-      this.$router.push(ROUTING.start)
-    },
-    checkout () {
-      const payload = {
-        amount: this.getTotalPriceInCart + this.deliveryAmount,
-        email: 'demoshop@bm.pl'
-      }
+const deliveryAmount = ref(15.90);
+const processing = ref(false);
 
-      this.processing = true
-      axiosInstance.post(ENDPOINTS.buy, payload)
-        .then(response => {
-          const { redirectUrl } = response?.data || {}
+const store = useStore();
+const itemsInCart = computed(() => store.state.cart.cartItems);
+const getTotalPriceInCart = computed(() => store.getters.getTotalPriceInCart);
+const getTotalAmountWithDiscountApplied = computed(() => store.getters.getTotalAmountWithDiscountApplied);
 
-          if (typeof redirectUrl === 'string' && redirectUrl.length) {
-            this.UPDATE_CART(null)
-            localStorage.removeItem('cart')
-            window.location.href = redirectUrl
-          }
-        })
-        .catch(error => {
-          console.log('err', error)
-        })
-        .finally(() => {
-          this.processing = false
-        })
-    }
-  },
-  created () {
-    ToolsClass.scrollToElementTop(document.querySelector('header'))
+const goHome = () => {
+  router.push(ROUTING.start);
+}
+
+const checkout = () => {
+  const payload = {
+    amount: getTotalPriceInCart.value + deliveryAmount.value,
+    email: 'demoshop@bm.pl'
   }
+
+  processing.value = true
+  axiosInstance.post(ENDPOINTS.buy, payload)
+    .then(response => {
+      const { redirectUrl } = response?.data || {}
+
+      if (typeof redirectUrl === 'string' && redirectUrl.length) {
+        store.commit('UPDATE_CART', null);
+        localStorage.removeItem('cart')
+        window.location.href = redirectUrl
+      }
+    })
+    .catch(error => {
+      console.log('err', error)
+    })
+    .finally(() => {
+      processing.value = false
+    })
 }
 </script>
 <style lang="scss" src="../scss/Summary.scss"></style>

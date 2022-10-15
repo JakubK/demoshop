@@ -12,11 +12,4 @@
   </div>
 </template>
 
-<script>
-
-export default {
-  name: 'TopMenu'
-}
-</script>
-
 <style lang="scss" src="../scss/TopMenu.scss"></style>

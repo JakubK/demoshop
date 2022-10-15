@@ -20,17 +20,13 @@
   </div>
 </template>
 
-<script>
-
-export default {
-  name: 'Steps',
-  props: {
+<script lang="ts" setup>
+defineProps({
     currentStep: {
       default: 1,
       type: Number
     }
-  }
-}
+  })
 </script>
 
 <style lang="scss" src="../scss/Steps.scss"></style>

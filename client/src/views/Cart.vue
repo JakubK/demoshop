@@ -51,8 +51,8 @@
             <div>
               <p class="list-title">Wartość</p>
               <p class="price inverted">
-                <span>{{ item.quantity * item.product.regularPrice | pln }}</span>
-                <span>{{ item.quantity * item.product.price | pln }}</span>
+                <span>{{ item.quantity * item.product.regularPrice }}</span>
+                <span>{{ item.quantity * item.product.price }}</span>
               </p>
               <p class="discount">
                 {{ 100 - ((item.product.price / item.product.regularPrice) * 100) }}% taniej
@@ -67,7 +67,7 @@
               <div class="code-apply">Zastosuj kupon</div>
             </div>
             <span class="amount">
-             <span>Do zapłaty:</span> <span>{{ getTotalPriceInCart | pln }}</span>
+             <span>Do zapłaty:</span> <span>{{ getTotalPriceInCart }}</span>
           </span>
           </div>
         </div>
@@ -83,45 +83,25 @@
   </div>
 </template>
 
-<script>
+<script lang="ts" setup>
+import { computed } from 'vue'
+import { useStore } from '../store'
+import BottomLogos from '../components/BottomLogos.vue'
+import Steps from '../components/Steps.vue'
+import TopBar from '../components/TopBar.vue'
+import router, { ROUTING } from '../router'
 
-import { mapGetters, mapMutations, mapState } from 'vuex'
-import { ROUTING } from '../const/routing.const'
-import BottomLogos from '../components/BottomLogos'
-import Steps from '../components/Steps'
-import { ToolsClass } from '../tools/Tools.class'
-import TopBar from '../components/TopBar'
+const store = useStore();
+const itemsInCart = computed(() => store.state.cart.cartItems);
+const getTotalPriceInCart = computed(() => store.getters.getTotalPriceInCart);
+const getTotalItemsInCart = computed(() => store.getters.getTotalItemsInCart);
 
-export default {
-  name: 'Cart',
-  components: { TopBar, Steps, BottomLogos },
-  computed: {
-    ...mapState({
-      itemsInCart: state => state.cart.cartItems
-    }),
-    ...mapGetters({
-      getTotalPriceInCart: 'getTotalPriceInCart',
-      getTotalItemsInCart: 'getTotalItemsInCart'
-    })
-  },
-  methods: {
-    ...mapMutations([
-      'REMOVE_PRODUCT_FROM_CART',
-      'INCREMENT_PRODUCT_QUANTITY'
-    ]),
-    incrementProductQuantity (product) {
-      this.INCREMENT_PRODUCT_QUANTITY(product)
-    },
-    decrementProductQuantity (product) {
-      this.REMOVE_PRODUCT_FROM_CART(product)
-    },
-    goDelivery () {
-      this.$router.push(ROUTING.delivery)
-    }
-  },
-  created () {
-    ToolsClass.scrollToElementTop(document.querySelector('header'))
-  }
+const incrementProductQuantity = (product: any) => store.commit('INCREMENT_PRODUCT_QUANTITY', product);
+
+const decrementProductQuantity = (product: any) => store.commit('REMOVE_PRODUCT_FROM_CART', product);
+
+const goDelivery = () => {
+  router.push(ROUTING.delivery)
 }
 </script>
 <style lang="scss" src="../scss/Cart.scss"></style>

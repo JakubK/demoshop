@@ -87,16 +87,9 @@
   </div>
 </template>
 
-<script>
-
-import { ROUTING } from '../const/routing.const'
-
-export default {
-  name: 'Products',
-  methods: {
-    goToProduct () {
-      this.$router.push(ROUTING.product)
-    }
-  }
+<script lang="ts" setup>
+import router, { ROUTING } from '../router';
+const goToProduct = () => {
+  router.push(ROUTING.product)
 }
 </script>

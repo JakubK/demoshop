@@ -13,9 +13,3 @@
     </defs>
   </svg>
 </template>
-
-<script>
-export default {
-  name: 'TransactionSuccess'
-}
-</script>

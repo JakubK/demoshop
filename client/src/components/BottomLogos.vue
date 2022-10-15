@@ -14,11 +14,4 @@
   </div>
 </template>
 
-<script>
-
-export default {
-  name: 'BottomLogos'
-}
-</script>
-
 <style lang="scss" src="../scss/BottomLogos.scss"></style>

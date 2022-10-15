@@ -11,23 +11,13 @@
   </div>
 </template>
 
-<script>
-
-import Sidebar from '../components/Sidebar'
-import Products from '../components/Products'
-import BottomLogos from '../components/BottomLogos'
-import Breadcrumbs from '../components/Breadcrumbs'
-import TopMenu from '../components/TopMenu'
-import { ToolsClass } from '../tools/Tools.class'
-import TopBar from '../components/TopBar'
-
-export default {
-  name: 'ProductsView',
-  components: { TopBar, TopMenu, Breadcrumbs, BottomLogos, Products, Sidebar },
-  created () {
-    ToolsClass.scrollToElementTop(document.querySelector('header'))
-  }
-}
+<script lang="ts" setup>
+import Sidebar from '../components/Sidebar.vue'
+import Products from '../components/Products.vue'
+import BottomLogos from '../components/BottomLogos.vue'
+import Breadcrumbs from '../components/Breadcrumbs.vue'
+import TopMenu from '../components/TopMenu.vue'
+import TopBar from '../components/TopBar.vue'
 </script>
 
 <style lang="scss" src="../scss/Products.scss"></style>

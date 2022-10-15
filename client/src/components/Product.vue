@@ -29,8 +29,8 @@
           {{ 100 - ((product.price / product.regularPrice) * 100) }}% taniej
         </p>
         <p class="price">
-          <span>{{ product.price | pln }}</span>
-          <span>{{ product.regularPrice | pln }}</span>
+          <span>{{ product.price }}</span>
+          <span>{{ product.regularPrice }}</span>
         </p>
         <div class="sizes">
           <p>Rozmiar</p>
@@ -128,41 +128,34 @@
   </div>
 </template>
 
-<script>
+<script lang="ts" setup>
+import { reactive, ref } from 'vue';
+import router, { ROUTING } from '../router';
+import { useStore } from '../store';
 
-import { mapMutations } from 'vuex'
-import { ROUTING } from '../const/routing.const'
 
-export default {
-  name: 'Product',
-  data () {
-    return {
-      quantity: 1,
-      product: {
-        id: 1,
-        price: 50.00,
-        regularPrice: 80.00,
-        name: 'T-shirt z nadrukiem'
-      }
-    }
-  },
-  methods: {
-    ...mapMutations([
-      'ADD_PRODUCT_TO_CART'
-    ]),
-    decrementProductQuantity () {
-      while (this.quantity > 1) {
-        this.quantity--
-      }
-    },
-    incrementProductQuantity () {
-      this.quantity++
-    },
-    addToCart (product) {
-      this.ADD_PRODUCT_TO_CART({ product, quantity: this.quantity })
-      this.$router.push(ROUTING.cart)
-    }
+const store = useStore();
+const quantity = ref(1);
+const product = reactive({
+  id: 1,
+  price: 50.00,
+  regularPrice: 80.00,
+  name: 'T-shirt z nadrukiem'
+});
+
+const decrementProductQuantity = () => {
+  if (quantity.value > 1) {
+    quantity.value--;
   }
+}
+
+const incrementProductQuantity = () => {
+  quantity.value++;
+}
+
+const addToCart = (product: any) => {
+  store.commit('ADD_PRODUCT_TO_CART', { product, quantity: quantity.value });
+  router.push(ROUTING.cart)
 }
 </script>
 

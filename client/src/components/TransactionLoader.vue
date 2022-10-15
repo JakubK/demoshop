@@ -19,9 +19,3 @@
     </defs>
   </svg>
 </template>
-
-<script>
-export default {
-  name: 'TransactionLoader'
-}
-</script>

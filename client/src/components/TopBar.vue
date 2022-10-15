@@ -16,23 +16,16 @@
   </div>
 </template>
 
-<script>
+<script lang="ts" setup>
 
-import { mapGetters } from 'vuex'
-import { ROUTING } from '../const/routing.const'
+import { computed } from 'vue';
+import { useStore } from '../store'
+import router, { ROUTING } from '../router'
 
-export default {
-  name: 'TopBar',
-  computed: {
-    ...mapGetters({
-      getTotalItemsInCart: 'getTotalItemsInCart'
-    })
-  },
-  methods: {
-    goToCart () {
-      this.$router.push(ROUTING.cart)
-    }
-  }
+const store = useStore();
+const getTotalItemsInCart = computed(() => store.getters.getTotalItemsInCart);
+const goToCart = () => {
+  router.push(ROUTING.cart)
 }
 </script>
 

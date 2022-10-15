@@ -111,7 +111,7 @@
         <div>
           <span class="summary-amount">
             <span>Do zapłaty:</span>
-            <span>{{ getTotalPriceInCart | pln }}</span>
+            <span>{{ getTotalPriceInCart }}</span>
           </span>
         </div>
       </div>
@@ -125,29 +125,17 @@
   </div>
 </template>
 
-<script>
+<script lang="ts" setup>
 
-import Steps from '../components/Steps'
-import { mapGetters } from 'vuex'
-import { ROUTING } from '../const/routing.const'
-import { ToolsClass } from '../tools/Tools.class'
+import Steps from '../components/Steps.vue'
+import { useStore } from '../store'
+import router, { ROUTING } from '../router'
+import { computed } from 'vue'
 
-export default {
-  name: 'Delivery',
-  components: { Steps },
-  computed: {
-    ...mapGetters({
-      getTotalPriceInCart: 'getTotalPriceInCart'
-    })
-  },
-  methods: {
-    goSummary () {
-      this.$router.push(ROUTING.summary)
-    }
-  },
-  created () {
-    ToolsClass.scrollToElementTop(document.querySelector('header'))
-  }
+const store = useStore();
+const getTotalPriceInCart = computed(() => store.getters.getTotalPriceInCart);
+const goSummary = () => {
+  router.push(ROUTING.summary);
 }
 </script>
 <style lang="scss" src="../scss/Delivery.scss"></style>

@@ -16,17 +16,14 @@
   </div>
 </template>
 
-<script>
+<script lang="ts" setup>
 
-export default {
-  name: 'Breadcrumbs',
-  props: {
-    isSingleProduct: {
-      default: false,
-      type: Boolean
-    }
+defineProps({
+  isSingleProduct: {
+    type: Boolean,
+    default: false
   }
-}
+})
 </script>
 
 <style lang="scss" src="../scss/Breadcrumbs.scss"></style>

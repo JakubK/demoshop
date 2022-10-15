@@ -11,19 +11,15 @@
   </header>
 </template>
 
-<script>
-import { ROUTING } from '../const/routing.const'
+<script lang="ts" setup>
+import { useRoute } from 'vue-router';
+import router, { ROUTING } from '../router';
 
-export default {
-  name: 'AppHeader',
-  methods: {
-    goToHomePage () {
-      if (this.$route.path === ROUTING.start) {
-        return
-      }
-      this.$router.push(ROUTING.start)
-    }
-  }
+const route = useRoute();
+const goToHomePage = () => {
+  if (route.path === ROUTING.start)
+    return;
+  router.push(ROUTING.start)
 }
 </script>
 
